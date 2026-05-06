@@ -25,7 +25,9 @@ DIST = ROOT / "artifacts" / "demo"
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Create a public validation manifest from the NeuroTwin review queue.")
     parser.add_argument("--payload", default=str(DIST / "demo_data.json"), help="Path to generated demo_data.json.")
-    parser.add_argument("--accession", default="<openneuro_accession>", help="OpenNeuro accession placeholder, e.g. ds000001.")
+    parser.add_argument(
+        "--accession", default="<openneuro_accession>", help="OpenNeuro accession placeholder, e.g. ds000001."
+    )
     parser.add_argument("--dataset-root", default="<local_bids_root>", help="Local BIDS dataset root or placeholder.")
     parser.add_argument("--output-dir", default=str(DIST), help="Directory for manifest and runbook outputs.")
     parser.add_argument("--output-prefix", default="public_validation", help="Output filename prefix.")
@@ -255,7 +257,9 @@ def build_manifest(payload: dict, accession: str, dataset_root: str, scenario_fi
         "validation_bridge": bridge,
         "scenario_review_summary": rows,
         "validation_readiness_requirements": validation_readiness_requirements(),
-        "validation_protocol_template": validation_protocol_template(accession, dataset_root, scenario_filter, tier_filter),
+        "validation_protocol_template": validation_protocol_template(
+            accession, dataset_root, scenario_filter, tier_filter
+        ),
         "minimum_artifacts": [
             "BIDS validation report",
             "ROI extraction QC report",
@@ -399,7 +403,12 @@ def write_runbook(manifest: dict, output_dir: Path, output_prefix: str) -> Path:
     ]
     for tier in manifest["validation_bridge"]["tiers"]:
         priority = next(
-            (task["priority"] for row in manifest["scenario_review_summary"] for task in row["review_tasks"] if task["action"] == tier["name"]),
+            (
+                task["priority"]
+                for row in manifest["scenario_review_summary"]
+                for task in row["review_tasks"]
+                if task["action"] == tier["name"]
+            ),
             "-",
         )
         lines.append(f"| {priority} | {tier['name']} | {tier['dataset']} | {tier['task']} | {tier['success_gate']} |")

@@ -20,7 +20,7 @@ SRC = PROJECT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-from neurotwin.core import (
+from neurotwin.core import (  # noqa: E402
     NETWORKS,
     SCENARIOS,
     effective_connectivity_from_surrogate,
@@ -487,10 +487,22 @@ def build_learning_update(scenario_key: str, intervention: dict[str, float], met
         "objective_signal": round(objective_signal, 4),
         "intervention_cost": round(intervention_cost, 4),
         "signal_bars": [
-            {"label": "BOLD uncertainty", "value": round(uncertainty, 4), "scaled": round(min(1.0, uncertainty / 0.35), 4)},
+            {
+                "label": "BOLD uncertainty",
+                "value": round(uncertainty, 4),
+                "scaled": round(min(1.0, uncertainty / 0.35), 4),
+            },
             {"label": "FC gap", "value": round(fc_gap, 4), "scaled": round(min(1.0, fc_gap / 0.20), 4)},
-            {"label": "Objective signal", "value": round(objective_signal, 4), "scaled": round(min(1.0, objective_signal / 0.40), 4)},
-            {"label": "Validation cost", "value": round(intervention_cost, 4), "scaled": round(min(1.0, intervention_cost / 0.70), 4)},
+            {
+                "label": "Objective signal",
+                "value": round(objective_signal, 4),
+                "scaled": round(min(1.0, objective_signal / 0.40), 4),
+            },
+            {
+                "label": "Validation cost",
+                "value": round(intervention_cost, 4),
+                "scaled": round(min(1.0, intervention_cost / 0.70), 4),
+            },
         ],
         "top_action": ranked[0]["action"],
         "negative_evidence": negative_evidence,
@@ -579,14 +591,11 @@ def build_validation_ledger(metrics: dict[str, float], learning: dict) -> dict:
             "next_control": "Route to public-data validation before translational claims.",
         },
     ]
-    counts = {status: sum(1 for item in gates if item["status"] == status) for status in ["pass", "watch", "review", "hold"]}
+    counts = {
+        status: sum(1 for item in gates if item["status"] == status) for status in ["pass", "watch", "review", "hold"]
+    }
     readiness_score = round(
-        (
-            counts["pass"] * 1.0
-            + counts["watch"] * 0.6
-            + counts["review"] * 0.4
-        )
-        / len(gates),
+        (counts["pass"] * 1.0 + counts["watch"] * 0.6 + counts["review"] * 0.4) / len(gates),
         4,
     )
     if counts["hold"]:
@@ -704,17 +713,35 @@ def build_payload() -> dict:
                 {
                     "name": "Fidelity-first",
                     "use_case": "Prioritize model reliability before external validation.",
-                    "weights": {"fidelity": 0.42, "objective_alignment": 0.18, "novelty": 0.10, "feasibility": 0.16, "risk_control": 0.14},
+                    "weights": {
+                        "fidelity": 0.42,
+                        "objective_alignment": 0.18,
+                        "novelty": 0.10,
+                        "feasibility": 0.16,
+                        "risk_control": 0.14,
+                    },
                 },
                 {
                     "name": "Exploration-first",
                     "use_case": "Search for high-novelty mechanisms while keeping validation gates visible.",
-                    "weights": {"fidelity": 0.22, "objective_alignment": 0.20, "novelty": 0.32, "feasibility": 0.12, "risk_control": 0.14},
+                    "weights": {
+                        "fidelity": 0.22,
+                        "objective_alignment": 0.20,
+                        "novelty": 0.32,
+                        "feasibility": 0.12,
+                        "risk_control": 0.14,
+                    },
                 },
                 {
                     "name": "Risk-controlled",
                     "use_case": "Prefer lower-risk candidates when downstream validation is expensive or sensitive.",
-                    "weights": {"fidelity": 0.24, "objective_alignment": 0.18, "novelty": 0.12, "feasibility": 0.20, "risk_control": 0.26},
+                    "weights": {
+                        "fidelity": 0.24,
+                        "objective_alignment": 0.18,
+                        "novelty": 0.12,
+                        "feasibility": 0.20,
+                        "risk_control": 0.26,
+                    },
                 },
             ],
         },
@@ -880,8 +907,7 @@ def write_report(payload: dict) -> None:
     for key, item in payload["scenarios"].items():
         m = item["metrics"]
         scenario_lines.append(
-            f"| {item['name']} | {m['bold_r2']} | {m['fc_corr']} | "
-            f"{m['objective_delta']} | {item['objective']} |"
+            f"| {item['name']} | {m['bold_r2']} | {m['fc_corr']} | " f"{m['objective_delta']} | {item['objective']} |"
         )
         learn = item["learning_update"]
         top = learn["ranked_actions"][0]
@@ -974,8 +1000,9 @@ def write_report(payload: dict) -> None:
 
 
 def write_data_card() -> None:
-    data_card = dedent(
-        """
+    data_card = (
+        dedent(
+            """
         # Data Card
 
         This demo uses synthetic ROI-level fMRI-like time series generated by a stable nonlinear
@@ -1004,7 +1031,9 @@ def write_data_card() -> None:
         The dataset is only for demonstrating the workflow and UI. It should not be interpreted as
         a biomedical model or used for clinical claims.
         """
-    ).strip() + "\n"
+        ).strip()
+        + "\n"
+    )
     (DIST / "data_card.md").write_text(data_card, encoding="utf-8")
 
 
@@ -1251,9 +1280,7 @@ def write_next_validation_packets(payload: dict) -> None:
         card_list = ", ".join(item["card_id"] for item in packet["linked_evidence_cards"])
         output_list = "; ".join(packet["required_outputs"])
         protocol_list = "; ".join(packet["protocol_files"])
-        negative = "; ".join(
-            f"{item['action']} ({item['priority_score']})" for item in packet["negative_evidence"]
-        )
+        negative = "; ".join(f"{item['action']} ({item['priority_score']})" for item in packet["negative_evidence"])
         lines += [
             f"### {packet['scenario']}",
             "",
@@ -1299,7 +1326,9 @@ def write_capability_card(payload: dict) -> None:
     lines += ["", "## Platform Fit", ""]
     lines += [f"- {item}" for item in cap["platform_fit"]]
     lines += ["", "## Agent Skill Route", ""]
-    lines += [f"- `{item['skill_id']}` ({item['stage']}): {item['purpose']}" for item in payload["agent_skill_registry"]]
+    lines += [
+        f"- `{item['skill_id']}` ({item['stage']}): {item['purpose']}" for item in payload["agent_skill_registry"]
+    ]
     lines += [
         "",
         "## Next Validation Packet",
@@ -1528,7 +1557,9 @@ def write_acquisition_policy_note(payload: dict) -> None:
         "| --- | --- |",
     ]
     for scenario in payload["scenarios"].values():
-        rejected = "; ".join(f"{item['action']} ({item['priority_score']})" for item in scenario["learning_update"]["negative_evidence"])
+        rejected = "; ".join(
+            f"{item['action']} ({item['priority_score']})" for item in scenario["learning_update"]["negative_evidence"]
+        )
         lines.append(f"| {scenario['name']} | {rejected} |")
     lines += [
         "",
@@ -1664,7 +1695,7 @@ def write_platform_architecture_note(payload: dict) -> None:
         '  D --> E["Programmable Acquisition Policy<br/>weights, profiles, next-run ranking"]',
         '  E --> F["Next Experiment<br/>dry-run, human check, lab feedback"]',
         '  F --> G["Learning Memory<br/>positive signal + negative evidence"]',
-        '  G --> A',
+        "  G --> A",
         "```",
         "",
         "## Layer Responsibilities",

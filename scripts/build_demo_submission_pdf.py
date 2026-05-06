@@ -23,7 +23,6 @@ from reportlab.lib.units import mm
 from reportlab.platypus import (
     Image,
     ListFlowable,
-    ListItem,
     PageBreak,
     Paragraph,
     Preformatted,
@@ -82,10 +81,7 @@ def fontify(text: str, bold: bool = False) -> str:
     """Escape text and render Latin letters/numbers in Times New Roman."""
     latin = LATIN_BOLD if bold else LATIN_FONT
     lines = escape(text).split("\n")
-    return "<br/>".join(
-        ASCII_RE.sub(lambda m: f'<font name="{latin}">{m.group(1)}</font>', line)
-        for line in lines
-    )
+    return "<br/>".join(ASCII_RE.sub(lambda m: f'<font name="{latin}">{m.group(1)}</font>', line) for line in lines)
 
 
 def styles() -> dict[str, ParagraphStyle]:
@@ -269,10 +265,34 @@ def callout(title: str, body: str, color: colors.Color = BLUE) -> Table:
 def dsvl_table() -> Table:
     rows = [
         ["阶段", "科学问题", "核心计算/动作", "本轮产物", "回流到下一轮"],
-        ["Design", "要验证哪个脑机制或干预目标？", "证据卡片、任务场景、目标函数、候选扰动", "scenario objective, evidence cards", "更新问题空间和候选机制"],
-        ["Simulate", "surrogate brain 在任务/扰动下如何响应？", "ROI 动力学预测、FC/EC 估计、虚拟扰动", "BOLD prediction, FC shift, EC response", "暴露不确定性与候选收益"],
-        ["Validate", "结果是否通过可信度门控？", "Signal fidelity、FC reproducibility、objective effect、budget、external evidence", "Validation Ledger, review gate queue", "决定 pass/watch/review/hold"],
-        ["Learn", "下一轮应改变什么？", "多目标 acquisition policy、负证据记录、下一轮任务生成", "Next Validation Packet", "生成新的验证任务和策略权重"],
+        [
+            "Design",
+            "要验证哪个脑机制或干预目标？",
+            "证据卡片、任务场景、目标函数、候选扰动",
+            "scenario objective, evidence cards",
+            "更新问题空间和候选机制",
+        ],
+        [
+            "Simulate",
+            "surrogate brain 在任务/扰动下如何响应？",
+            "ROI 动力学预测、FC/EC 估计、虚拟扰动",
+            "BOLD prediction, FC shift, EC response",
+            "暴露不确定性与候选收益",
+        ],
+        [
+            "Validate",
+            "结果是否通过可信度门控？",
+            "Signal fidelity、FC reproducibility、objective effect、budget、external evidence",
+            "Validation Ledger, review gate queue",
+            "决定 pass/watch/review/hold",
+        ],
+        [
+            "Learn",
+            "下一轮应改变什么？",
+            "多目标 acquisition policy、负证据记录、下一轮任务生成",
+            "Next Validation Packet",
+            "生成新的验证任务和策略权重",
+        ],
     ]
     return make_table(rows, [18 * mm, 39 * mm, 44 * mm, 32 * mm, 32 * mm])
 
@@ -345,10 +365,26 @@ def cover() -> list:
         make_table(
             [
                 ["问题", "NeuroTwin 的回答", "对应工件"],
-                ["究竟在做什么？", "把脑影像分析从单次建模推进到可运行的虚拟实验闭环：先设计可检验假设，再用 surrogate brain 模拟扰动，随后进入验证门控，最后生成下一轮任务。", "brain_twin_lab.html, demo_data.json"],
-                ["如何体现 AI4S？", "它把科学问题拆成 workflow：证据输入、数据准备、模型仿真、可信验证、策略学习和交接包生成。每一步都能被记录、复查、替换和自动调度。", "agent_skill_registry.md, experiment_trace.jsonl"],
-                ["为什么有价值？", "在真实 fMRI、神经调控或药物机制验证前，先用可审计虚拟实验筛选假设、暴露不确定性、生成公开验证协议，减少盲目实验成本。", "validation_ledger.md, public_validation_manifest.json"],
-                ["如何持续迭代？", "Validate 产生 pass/watch/review/hold 状态；Learn 把指标快照、负证据和下一步策略写入 packet，下一轮 Design 直接读取。", "next_validation_packet.json"],
+                [
+                    "究竟在做什么？",
+                    "把脑影像分析从单次建模推进到可运行的虚拟实验闭环：先设计可检验假设，再用 surrogate brain 模拟扰动，随后进入验证门控，最后生成下一轮任务。",
+                    "brain_twin_lab.html, demo_data.json",
+                ],
+                [
+                    "如何体现 AI4S？",
+                    "它把科学问题拆成 workflow：证据输入、数据准备、模型仿真、可信验证、策略学习和交接包生成。每一步都能被记录、复查、替换和自动调度。",
+                    "agent_skill_registry.md, experiment_trace.jsonl",
+                ],
+                [
+                    "为什么有价值？",
+                    "在真实 fMRI、神经调控或药物机制验证前，先用可审计虚拟实验筛选假设、暴露不确定性、生成公开验证协议，减少盲目实验成本。",
+                    "validation_ledger.md, public_validation_manifest.json",
+                ],
+                [
+                    "如何持续迭代？",
+                    "Validate 产生 pass/watch/review/hold 状态；Learn 把指标快照、负证据和下一步策略写入 packet，下一轮 Design 直接读取。",
+                    "next_validation_packet.json",
+                ],
             ],
             [31 * mm, 93 * mm, 41 * mm],
         ),
@@ -356,15 +392,38 @@ def cover() -> list:
         make_table(
             [
                 ["层面", "已经实现", "还没有实现", "希望实现与 Scaling 路线"],
-                ["数据", "合成脱敏 ROI 级 fMRI-like 数据、公开数据验证模板。", "尚未接入真实受试者影像或行为读数。", "先做 OpenNeuro P1 smoke test，再扩展到 HCP/ABCD、多任务、多站点。"],
-                ["模型", "轻量一步预测 surrogate、FC/EC 与虚拟扰动响应。", "尚未训练大规模 subject-aware 或 task-aware 模型。", "扩展为图时序模型、个体化模型和多模态脑表型基础模型。"],
-                ["闭环", "Validation Ledger、Review Queue、Next Validation Packet 已生成。", "尚未接入真实实验室执行和人类专家签核系统。", "把每轮 packet 变成 Agent 可执行任务，支持持续实验队列和学习记忆。"],
-                ["平台化", "Read/Prepare/Build/Compute/Validate/Learn 技能路线已定义。", "尚未接入 Bohrium/SciMaster/实验操作系统。", "按统一 schema 暴露为 AI4S workflow 节点，支持数据集、任务和模型规模扩展。"],
+                [
+                    "数据",
+                    "合成脱敏 ROI 级 fMRI-like 数据、公开数据验证模板。",
+                    "尚未接入真实受试者影像或行为读数。",
+                    "先做 OpenNeuro P1 smoke test，再扩展到 HCP/ABCD、多任务、多站点。",
+                ],
+                [
+                    "模型",
+                    "轻量一步预测 surrogate、FC/EC 与虚拟扰动响应。",
+                    "尚未训练大规模 subject-aware 或 task-aware 模型。",
+                    "扩展为图时序模型、个体化模型和多模态脑表型基础模型。",
+                ],
+                [
+                    "闭环",
+                    "Validation Ledger、Review Queue、Next Validation Packet 已生成。",
+                    "尚未接入真实实验室执行和人类专家签核系统。",
+                    "把每轮 packet 变成 Agent 可执行任务，支持持续实验队列和学习记忆。",
+                ],
+                [
+                    "平台化",
+                    "Read/Prepare/Build/Compute/Validate/Learn 技能路线已定义。",
+                    "尚未接入 Bohrium/SciMaster/实验操作系统。",
+                    "按统一 schema 暴露为 AI4S workflow 节点，支持数据集、任务和模型规模扩展。",
+                ],
             ],
             [23 * mm, 45 * mm, 43 * mm, 54 * mm],
         ),
         Spacer(1, 3 * mm),
-        p("建议阅读顺序：第 2 页看 DSVL 机制，第 3-5 页看 Demo 截图，第 6 页看关键代码，第 7 页看提交材料和边界。", "small"),
+        p(
+            "建议阅读顺序：第 2 页看 DSVL 机制，第 3-5 页看 Demo 截图，第 6 页看关键代码，第 7 页看提交材料和边界。",
+            "small",
+        ),
     ]
 
 
@@ -380,8 +439,18 @@ def page_dsvl() -> list:
         make_table(
             [
                 ["对象", "生成阶段", "用途", "进入下一轮的方式"],
-                ["Evidence Cards", "Design", "把文献、标准和方法建议转成结构化假设输入", "影响目标函数、ROI 选择和验证指标"],
-                ["Virtual Perturbation Response", "Simulate", "在真实实验前测试候选机制的网络级影响", "暴露收益、风险和不确定性"],
+                [
+                    "Evidence Cards",
+                    "Design",
+                    "把文献、标准和方法建议转成结构化假设输入",
+                    "影响目标函数、ROI 选择和验证指标",
+                ],
+                [
+                    "Virtual Perturbation Response",
+                    "Simulate",
+                    "在真实实验前测试候选机制的网络级影响",
+                    "暴露收益、风险和不确定性",
+                ],
                 ["Validation Ledger", "Validate", "把模型输出拆成可复核门控", "review/watch 进入下一轮验证任务"],
                 ["Acquisition Portfolio", "Learn", "排序下一轮候选实验", "更新实验优先级和策略权重"],
                 ["Next Validation Packet", "Learn", "把本轮结果打包成机器可读任务", "作为下一轮 Design 输入"],
@@ -504,12 +573,28 @@ def page_materials() -> list:
         make_table(
             [
                 ["类别", "文件", "证明内容"],
-                ["说明文档", "docs/demo/ / artifacts/demo/demo_submission.pdf", "项目目标、DSVL 闭环、Demo 展示方式、能力边界"],
+                [
+                    "说明文档",
+                    "docs/demo/ / artifacts/demo/demo_submission.pdf",
+                    "项目目标、DSVL 闭环、Demo 展示方式、能力边界",
+                ],
                 ["核心代码", "src/neurotwin/core.py", "合成 ROI 信号、surrogate dynamics、FC/EC 与扰动响应"],
-                ["核心代码", "scripts/run_demo.py", "生成 Demo 网页、指标、Validation Ledger、Agent route、Next Validation Packet"],
-                ["核心代码", "scripts/prepare_public_validation.py", "把 review gate 转成公开 fMRI 验证 manifest、runbook 和 protocol template"],
+                [
+                    "核心代码",
+                    "scripts/run_demo.py",
+                    "生成 Demo 网页、指标、Validation Ledger、Agent route、Next Validation Packet",
+                ],
+                [
+                    "核心代码",
+                    "scripts/prepare_public_validation.py",
+                    "把 review gate 转成公开 fMRI 验证 manifest、runbook 和 protocol template",
+                ],
                 ["数据产物", "artifacts/demo/demo_data.json", "脱敏合成数据、模型指标、验证台账、DSVL 对象"],
-                ["交互 Demo", "artifacts/demo/brain_twin_lab.html", "可视化展示 DSVL、虚拟扰动、验证门控和 Learn 阶段策略"],
+                [
+                    "交互 Demo",
+                    "artifacts/demo/brain_twin_lab.html",
+                    "可视化展示 DSVL、虚拟扰动、验证门控和 Learn 阶段策略",
+                ],
                 ["验证包", "artifacts/demo/next_validation_packet.json", "本轮结果到下一轮任务的机器可读交接对象"],
             ],
             [25 * mm, 55 * mm, 85 * mm],
@@ -570,7 +655,15 @@ def build_pdf(path: Path) -> None:
         author="NeuroTwin",
     )
     story = []
-    for page in [cover, page_dsvl, page_demo_top, page_demo_perturb_trace, page_demo_signal_folded, page_code, page_materials]:
+    for page in [
+        cover,
+        page_dsvl,
+        page_demo_top,
+        page_demo_perturb_trace,
+        page_demo_signal_folded,
+        page_code,
+        page_materials,
+    ]:
         if story:
             story.append(PageBreak())
         story.extend(page())

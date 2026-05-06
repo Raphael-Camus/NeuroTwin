@@ -145,9 +145,7 @@ def functional_connectivity(series: np.ndarray) -> np.ndarray:
     return np.nan_to_num(np.corrcoef(series.T), nan=0.0)
 
 
-def effective_connectivity_from_surrogate(
-    series: np.ndarray, coef: np.ndarray, delta: float = 0.30
-) -> np.ndarray:
+def effective_connectivity_from_surrogate(series: np.ndarray, coef: np.ndarray, delta: float = 0.30) -> np.ndarray:
     """Average one-step response after perturbing each source node."""
     n = len(NETWORKS)
     base_aug = np.concatenate([series[:-1], np.ones((len(series) - 1, 1))], axis=1)

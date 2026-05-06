@@ -14,26 +14,18 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
-from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
-from reportlab.platypus import PageBreak, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Spacer, Table
 
 from build_demo_submission_pdf import (
     BLUE,
-    FONT,
     GREEN,
-    HEADER_BG,
-    INK,
     LATIN_FONT,
-    LINE,
     MUTED,
     callout,
-    code,
     make_table,
     p,
-    pb,
-    pdfmetrics,
 )
 
 
