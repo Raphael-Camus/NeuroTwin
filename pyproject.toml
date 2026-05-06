@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "neurotwin"
+version = "0.1.0"
+description = "AI4S surrogate-brain workflow prototype built around a Design-Simulate-Validate-Learn loop."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Raphael Camus" }
+]
+dependencies = [
+  "numpy>=1.26"
+]
+
+[project.optional-dependencies]
+reports = [
+  "reportlab>=4.0"
+]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.6",
+  "reportlab>=4.0"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/neurotwin"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"

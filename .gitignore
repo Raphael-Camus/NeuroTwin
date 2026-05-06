@@ -1,0 +1,49 @@
+# macOS and editors
+.DS_Store
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.python-version
+.venv/
+venv/
+env/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Local tooling caches
+.playwright-cli/
+.swift-module-cache/
+tmp/
+
+# Generated artifacts
+artifacts/**
+!artifacts/
+!artifacts/README.md
+output/
+results/*
+!results/
+!results/README.md
+!results/.gitkeep
+
+# Local data
+data/raw/
+data/processed/*
+!data/processed/
+!data/processed/.gitkeep
+
+# Private application and submission materials
+application_materials/**
+!application_materials/
+!application_materials/README.md
+
+# Reference PDFs and extracted copyrighted paper text
+references/papers/**
+!references/papers/
+!references/papers/.gitkeep
+!references/papers/.gitkeep
