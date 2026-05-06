@@ -1,0 +1,55 @@
+{
+  "project": "NeuroTwin",
+  "snapshot_type": "curated_workflow_contract",
+  "scenarios": [
+    {
+      "key": "emotion",
+      "name": "Emotional faces",
+      "metrics": {
+        "bold_r2": 0.8387,
+        "fc_corr": 0.898,
+        "objective_delta": 0.3587,
+        "readiness_score": 0.88
+      },
+      "top_next_action": "Behavior endpoint alignment",
+      "top_priority": 0.2037,
+      "review_gate_count": 1,
+      "routing": "Advance as dry-run with explicit review gates"
+    },
+    {
+      "key": "control",
+      "name": "Cognitive control",
+      "metrics": {
+        "bold_r2": 0.8593,
+        "fc_corr": 0.9416,
+        "objective_delta": 0.1031,
+        "readiness_score": 0.88
+      },
+      "top_next_action": "Behavior endpoint alignment",
+      "top_priority": 0.1112,
+      "review_gate_count": 1,
+      "routing": "Advance as dry-run with explicit review gates"
+    },
+    {
+      "key": "closed_loop",
+      "name": "Closed-loop neuro experiment",
+      "metrics": {
+        "bold_r2": 0.7382,
+        "fc_corr": 0.9396,
+        "objective_delta": 0.1762,
+        "readiness_score": 0.88
+      },
+      "top_next_action": "Constrained policy search",
+      "top_priority": 0.1671,
+      "review_gate_count": 1,
+      "routing": "Advance as dry-run with explicit review gates"
+    }
+  ],
+  "contract_checks": [
+    "scenario metrics are present",
+    "validation ledger gates are present",
+    "review queue is present",
+    "ranked next actions are present",
+    "next validation packets list required outputs"
+  ]
+}

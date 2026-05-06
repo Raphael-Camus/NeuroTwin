@@ -25,12 +25,17 @@ jobs:
           python -m py_compile src/neurotwin/core.py \
             scripts/run_demo.py \
             scripts/prepare_public_validation.py \
+            scripts/export_workflow_snapshot.py \
             scripts/build_demo_submission_pdf.py \
             scripts/build_project_proposal_pdf.py
       - name: Lint
         run: ruff check .
       - name: Run tests
         run: pytest
+      - name: Regenerate curated workflow snapshot
+        run: |
+          python scripts/export_workflow_snapshot.py
+          git diff --exit-code examples/workflow_snapshot.json examples/workflow_snapshot.md
       - name: Generate demo artifacts
         run: |
           python scripts/run_demo.py

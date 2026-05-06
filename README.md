@@ -59,6 +59,15 @@ http://127.0.0.1:8769/brain_twin_lab.html
 
 I ignore generated files under `artifacts/demo/` because they are reproducible from source.
 
+## What I Would Inspect First
+
+If I were reviewing this repository quickly, I would open these files first:
+
+- [examples/workflow_snapshot.md](examples/workflow_snapshot.md): a small committed output showing concrete scenario metrics, validation readiness, and next actions.
+- [src/neurotwin/contracts.py](src/neurotwin/contracts.py): the workflow contract checks I use to keep generated payloads reviewable.
+- [tests/test_workflow_contract.py](tests/test_workflow_contract.py): regression tests proving the generated DSVL payload and committed snapshot stay aligned.
+- [docs/value-proposition.md](docs/value-proposition.md): my short explanation of why this is more than a slideware demo.
+
 ## Developer Workflow
 
 ```bash
@@ -66,6 +75,7 @@ pip install -r requirements-dev.txt
 make compile
 make lint
 make test
+make snapshot
 make demo
 make validate
 ```
@@ -76,6 +86,7 @@ make validate
 NeuroTwin/
   src/neurotwin/              # Core surrogate-brain primitives
   scripts/                    # Reproducible artifact generation
+  examples/                   # Small committed workflow snapshot
   docs/                       # My design notes and system rationale
   tests/                      # Minimal regression tests
   data/                       # Local data placeholder; real data is ignored

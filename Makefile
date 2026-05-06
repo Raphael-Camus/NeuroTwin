@@ -1,4 +1,4 @@
-.PHONY: install install-dev test lint compile demo validate clean
+.PHONY: install install-dev test lint compile snapshot demo validate clean
 
 PYTHON ?= python
 
@@ -12,6 +12,7 @@ compile:
 	$(PYTHON) -m py_compile src/neurotwin/core.py \
 		scripts/run_demo.py \
 		scripts/prepare_public_validation.py \
+		scripts/export_workflow_snapshot.py \
 		scripts/build_demo_submission_pdf.py \
 		scripts/build_project_proposal_pdf.py
 
@@ -20,6 +21,9 @@ lint:
 
 test:
 	$(PYTHON) -m pytest
+
+snapshot:
+	$(PYTHON) scripts/export_workflow_snapshot.py
 
 demo:
 	$(PYTHON) scripts/run_demo.py
