@@ -1,5 +1,5 @@
 # Results
 
-This directory is reserved for local experiment results. Generated dashboards, JSON payloads, PDFs, and traces should normally be written to `artifacts/` and regenerated from scripts.
+I reserve this directory for local experiment summaries that are not part of the reproducible demo artifact flow.
 
-Commit only small, curated result summaries when they are intentionally part of the project documentation.
+Generated dashboard outputs should normally go to `artifacts/` and remain ignored. I only commit result summaries when they are small, curated, and necessary to explain a design decision.

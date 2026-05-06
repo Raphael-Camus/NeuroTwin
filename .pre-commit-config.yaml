@@ -1,18 +1,16 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-added-large-files
-        args: ['--maxkb=50000'] # 防止不小心提交大于 50MB 的数据文件
+        args: ["--maxkb=10000"]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.3.0
+    rev: v0.15.12
     hooks:
-      # Run the linter
       - id: ruff
-        args: [ --fix ]
-      # Run the formatter
+        args: ["--fix"]
       - id: ruff-format

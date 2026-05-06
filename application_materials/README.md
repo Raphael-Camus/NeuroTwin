@@ -1,5 +1,5 @@
 # Application Materials
 
-This local-only directory is for pitch scripts, proposal PDFs, exported submission packages, and other career/application materials.
+I keep private pitch scripts, proposal drafts, exported PDFs, and submission packages here.
 
-It is intentionally ignored by Git so the public repository keeps a clean open-source surface focused on NeuroTwin's technical workflow.
+This directory is intentionally ignored by Git, except for this README, because the public repository should present NeuroTwin as an engineering and research project rather than a job-application folder.

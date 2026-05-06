@@ -1,8 +1,8 @@
 # Data
 
-This directory is reserved for local neuroimaging datasets and derived ROI tables.
+I keep this directory as a local data boundary.
 
-- `data/raw/` is ignored by Git. Use it for local BIDS/OpenNeuro/HCP/ABCD inputs.
-- `data/processed/` is ignored except for `.gitkeep`. Use it for local ROI time series, QC summaries, and split files.
+- `data/raw/` is where I would place local BIDS/OpenNeuro/HCP inputs. It is ignored by Git.
+- `data/processed/` is where I would place ROI time series, QC tables, and split files. It is ignored except for `.gitkeep`.
 
-No real subject MRI, DICOM, NIfTI, clinical, or personally identifying data should be committed to this repository.
+I do not commit real subject data to this repository.

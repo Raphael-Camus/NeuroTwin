@@ -46,4 +46,3 @@ application_materials/**
 references/papers/**
 !references/papers/
 !references/papers/.gitkeep
-!references/papers/.gitkeep

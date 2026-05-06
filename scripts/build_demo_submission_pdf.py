@@ -304,7 +304,10 @@ def dsvl_loop_diagram() -> Table:
         ("3 Validate", "ledger gates<br/>review queue<br/>public protocol", LIGHT_PURPLE),
         ("4 Learn", "acquisition policy<br/>negative evidence<br/>next packet", LIGHT_AMBER),
     ]
-    row = [p(f"{title}\n{body.replace('<br/>', '\n')}", "table") for title, body, _ in labels]
+    row = []
+    for title, body, _ in labels:
+        body_lines = body.replace("<br/>", "\n")
+        row.append(p(f"{title}\n{body_lines}", "table"))
     loop_note = [
         p(
             "Loop: Design feeds Simulate; Simulate feeds Validate; Validate feeds Learn; Learn writes the next Design packet.",
